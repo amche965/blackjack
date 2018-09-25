@@ -1,10 +1,9 @@
-<<<<<<< HEAD
 #!/bin/bash
 
-ppass=0     #player‚ÌƒpƒX‚Ì”
-cpass=0     #cpm‚ÌƒpƒX‚Ì”
-order=''    #æUŒãU
-other=''    #‚à‚¤•Ð•û
+ppass=0     #playerã®ãƒ‘ã‚¹ã®æ•°
+cpass=0     #cpmã®ãƒ‘ã‚¹ã®æ•°
+order=''    #å…ˆæ”»å¾Œæ”»
+other=''    #ã‚‚ã†ç‰‡æ–¹
 secret=0
 s=0
 pf=0
@@ -22,6 +21,7 @@ done
 echo ${a[@]}
 }
 
+
 Order(){
 s=$(($RANDOM % 2 + 1))
 
@@ -33,17 +33,54 @@ if [ $s -lt 2 ];then
         other='Player'
 fi
 
-echo 'ƒQ[ƒ€ŠJŽn : æs' $order
+echo 'ã‚²ãƒ¼ãƒ é–‹å§‹ : å…ˆæ”»' $order
 
-echo "$order : ${a[0]}"
-pd=(${a[0]} ${pd[@]})
-a=(${a[@]:1})
-echo "$other : ?"
-secret=${a[0]}
-a=(${a[@]:1})
+#è¿½åŠ 
+if [ $order = 'Player' ];then
+        echo "$order : ${a[0]}"
+        pd=(${a[0]} ${pd[@]})
+        a=(${a[@]:1})
+        pf=1
+
+        else
+        echo "$order : ?"
+        secret=${a[0]}
+        a=(${a[@]:1})
+        cf=1
+
+fi
+if [ $pf -lt 1 ];then
+        echo "$other : ${a[0]}"
+        pd=(${a[0]} ${pd[@]})
+        a=(${a[@]:1})
+        cf=0
+
+        else
+        echo "$other : ?"
+        secret=${a[0]}
+        a=(${a[@]:1})
+        pf=0
+fi
+
+playersum=$((playersum + ${pd[0]}))
 cpsum=$((cpsum + secert))
 }
 
+
+
+Pdrow(){
+read -p '>>>> ã‚«ãƒ¼ãƒ‰ã‚’å¼•ãã¾ã™ã‹ï¼Ÿ d/p:' choose
+
+if [ $choose = 'd' ];then
+        pd=(${pd[@]} ${a[0]})
+        playersum=$((playersum + ${a[0]}))
+        echo "Player : ${pd[@]} = åˆè¨ˆ"  $playersum
+        a=(${a[@]:1})
+
+        else
+        ppass=$((ppass+1))
+fi
+}
 
 Cdrow(){
 if [ $cpsum -le 17 ];then
@@ -52,12 +89,12 @@ if [ $cpsum -le 17 ];then
         else
         cchoose='p'
 fi
-echo '>>>> ƒJ[ƒh‚ðˆø‚«‚Ü‚·‚©H d/p:' $cchoose
+echo '>>>> ã‚«ãƒ¼ãƒ‰ã‚’å¼•ãã¾ã™ã‹ï¼Ÿ d/p:' $cchoose
 
 if [ $cchoose = 'd' ];then
         cpd=(${cpd[@]} ${a[0]})
         echo "${a[0]}"
-        echo '‡Œv : ? +' "${cpd[@]}"
+        echo 'åˆè¨ˆ : ? +' "${cpd[@]}"
         cpsum=$(( cpsum + ${a[0]} ));
         a=(${a[@]:1})
 
@@ -65,6 +102,9 @@ if [ $cchoose = 'd' ];then
         cpass=$((cpass+1))
 fi
 }
+
+
+
 Check(){
 if [ $cpsum -le 21 -a $playersum -le 21 ];then
         if [ $cpsum -lt $playersum ];then
@@ -78,15 +118,19 @@ if [ $cpsum -le 21 -a $playersum -le 21 ];then
                 echo 'You Lose'
         fi
 elif [ $cpsum -le 21 ];then
-                echo 'CPM : '$cpsum
-                echo 'Player : '$playersum
-                echo 'You Lose'
+        echo 'CPM : '$cpsum
+        echo 'Player : '$playersum
+        echo 'You Lose'
 
         else
+        echo 'CPM : '$cpsum
+        echo 'Player : '$playersum
         echo 'You Win!'
 
 fi
 }
+
+
 
 Drow
 Order
@@ -112,141 +156,3 @@ fi
 done
 
 Check
-
-
-
-
-=======
-#!/bin/bash
-
-ppass=0     #player‚ÌƒpƒX‚Ì”
-cpass=0     #cpm‚ÌƒpƒX‚Ì”
-order=''    #æUŒãU
-other=''    #‚à‚¤•Ð•û
-secret=0
-s=0
-pf=0
-cf=0
-pd=();
-cpd=();
-
-# ƒVƒƒƒbƒtƒ‹ŠÖ”
-shuffle() {
-local i tmp size max rand
-
-size=${#a[*]}
-max=$(( 32768 / size * size ))
-
-for ((i=size-1; i>0; i--)); do
-while (( (rand=$RANDOM) >= max )); do :; done
-rand=$(( rand % (i+1) ))
-tmp=${a[i]} a[i]=${a[rand]} a[rand]=$tmp
-done
-}
-
-Drow(){
-a=();
-for((i=0; i < 12; i++));
-do
-a[$i]=$(( $i + 1));
-done
-
-echo ${a[@]}
-}
-
-
-Order(){
-s=$(($RANDOM % 2 + 1))
-
-if [ $s -lt 2 ];then
-        order='Player'
-        other='CPM'
-        else
-        order='CPM'
-        other='Player'
-fi
-
-echo 'ƒQ[ƒ€ŠJŽn : æs' $order
-
-echo "$order : ${a[0]}"
-pd=(${a[0]} ${pd[@]})
-a=(${a[@]:1})
-echo "$other : ?"
-secret=${a[0]}
-a=(${a[@]:1})
-cpsum=$((cpsum + secert))
-}
-
-
-Cdrow(){
-if [ $cpsum -le 17 ];then
-        cchoose='d'
-
-        else
-        cchoose='p'
-fi
-echo '>>>> ƒJ[ƒh‚ðˆø‚«‚Ü‚·‚©H d/p:' $cchoose
-
-if [ $cchoose = 'd' ];then
-        cpd=(${cpd[@]} ${a[0]})
-        echo '‡Œv : ? +' "${cpd[@]}"
-        cpsum=$(( cpsum + ${a[0]} ));
-        a=(${a[@]:1})
-
-        else
-        cpass=$((cpass+1))
-fi
-}
-Check(){
-if [ $cpsum -le 21 -a $playersum -le 21 ];then
-        if [ $cpsum -lt $playersum ];then
-                echo 'CPM : ' $cpsum
-                echo 'Player : ' $playersum
-                echo 'You Win!'
-
-                else
-                echo 'CPM : ' $cpsum
-                echo 'Player : ' $playersum
-                echo 'You Lose'
-        fi
-elif [ $cpsum -le 21 ];then
-                echo 'CPM : '$cpsum
-                echo 'Player : '$playersum
-                echo 'You Lose'
-
-        else
-        echo 'You Win!'
-
-fi
-}
-
-Drow
-Order
-shuffle
-while [ $ppass -lt 2 -a $cpass -lt 2 ];
-do
-if [ $s -lt 2 ];then
-        Pdrow
-        pf=1
-        else
-        Cdrow
-        cf=1
-fi
-
-if [ $pf -lt 1 ];then
-        Pdrow
-        cf=0
-
-        else
-        Cdrow
-        pf=0
-fi
-
-done
-
-Check
-
-
-
-
->>>>>>> 0ff6a79b816443397ddfa98250dbc94c00fd8582
