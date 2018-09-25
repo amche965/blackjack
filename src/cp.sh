@@ -12,20 +12,6 @@ cf=0
 pd=();
 cpd=();
 
-# シャッフル関数
-shuffle() {
-local i tmp size max rand
-
-size=${#a[*]}
-max=$(( 32768 / size * size ))
-
-for ((i=size-1; i>0; i--)); do
-while (( (rand=$RANDOM) >= max )); do :; done
-rand=$(( rand % (i+1) ))
-tmp=${a[i]} a[i]=${a[rand]} a[rand]=$tmp
-done
-}
-
 Drow(){
 a=();
 for((i=0; i < 12; i++));
@@ -35,7 +21,6 @@ done
 
 echo ${a[@]}
 }
-
 
 Order(){
 s=$(($RANDOM % 2 + 1))
@@ -71,6 +56,7 @@ echo '>>>> カードを引きますか？ d/p:' $cchoose
 
 if [ $cchoose = 'd' ];then
         cpd=(${cpd[@]} ${a[0]})
+        echo "${a[0]}"
         echo '合計 : ? +' "${cpd[@]}"
         cpsum=$(( cpsum + ${a[0]} ));
         a=(${a[@]:1})
@@ -104,7 +90,6 @@ fi
 
 Drow
 Order
-shuffle
 while [ $ppass -lt 2 -a $cpass -lt 2 ];
 do
 if [ $s -lt 2 ];then
