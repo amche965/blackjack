@@ -1,15 +1,29 @@
 #!/bin/bash
 
-ppass=0     #player„ÅÆ„Éë„Çπ„ÅÆÊï∞
-cpass=0     #cpm„ÅÆ„Éë„Çπ„ÅÆÊï∞
-order=''    #ÂÖàÊîªÂæåÊîª
-other=''    #„ÇÇ„ÅÜÁâáÊñπ
+ppass=0     #playerÇÃÉpÉXÇÃêî
+cpass=0     #cpmÇÃÉpÉXÇÃêî
+order=''    #êÊçUå„çU
+other=''    #Ç‡Ç§ï–ï˚
 secret=0
 s=0
 pf=0
 cf=0
 pd=();
 cpd=();
+
+# ÉVÉÉÉbÉtÉãä÷êî
+shuffle() {
+local i tmp size max rand
+
+size=${#a[*]}
+max=$(( 32768 / size * size ))
+
+for ((i=size-1; i>0; i--)); do
+while (( (rand=$RANDOM) >= max )); do :; done
+rand=$(( rand % (i+1) ))
+tmp=${a[i]} a[i]=${a[rand]} a[rand]=$tmp
+done
+}
 
 Drow(){
 a=();
@@ -33,54 +47,17 @@ if [ $s -lt 2 ];then
         other='Player'
 fi
 
-echo '„Ç≤„Éº„É†ÈñãÂßã : ÂÖàÊîª' $order
+echo 'ÉQÅ[ÉÄäJén : êÊçs' $order
 
-#ËøΩÂä†
-if [ $order = 'Player' ];then
-        echo "$order : ${a[0]}"
-        pd=(${a[0]} ${pd[@]})
-        a=(${a[@]:1})
-        pf=1
-
-        else
-        echo "$order : ?"
-        secret=${a[0]}
-        a=(${a[@]:1})
-        cf=1
-
-fi
-if [ $pf -lt 1 ];then
-        echo "$other : ${a[0]}"
-        pd=(${a[0]} ${pd[@]})
-        a=(${a[@]:1})
-        cf=0
-
-        else
-        echo "$other : ?"
-        secret=${a[0]}
-        a=(${a[@]:1})
-        pf=0
-fi
-
-playersum=$((playersum + ${pd[0]}))
+echo "$order : ${a[0]}"
+pd=(${a[0]} ${pd[@]})
+a=(${a[@]:1})
+echo "$other : ?"
+secret=${a[0]}
+a=(${a[@]:1})
 cpsum=$((cpsum + secert))
 }
 
-
-
-Pdrow(){
-read -p '>>>> „Ç´„Éº„Éâ„ÇíÂºï„Åç„Åæ„Åô„ÅãÔºü d/p:' choose
-
-if [ $choose = 'd' ];then
-        pd=(${pd[@]} ${a[0]})
-        playersum=$((playersum + ${a[0]}))
-        echo "Player : ${pd[@]} = ÂêàË®à"  $playersum
-        a=(${a[@]:1})
-
-        else
-        ppass=$((ppass+1))
-fi
-}
 
 Cdrow(){
 if [ $cpsum -le 17 ];then
@@ -89,12 +66,11 @@ if [ $cpsum -le 17 ];then
         else
         cchoose='p'
 fi
-echo '>>>> „Ç´„Éº„Éâ„ÇíÂºï„Åç„Åæ„Åô„ÅãÔºü d/p:' $cchoose
+echo '>>>> ÉJÅ[ÉhÇà¯Ç´Ç‹Ç∑Ç©ÅH d/p:' $cchoose
 
 if [ $cchoose = 'd' ];then
         cpd=(${cpd[@]} ${a[0]})
-        echo "${a[0]}"
-        echo 'ÂêàË®à : ? +' "${cpd[@]}"
+        echo 'çáåv : ? +' "${cpd[@]}"
         cpsum=$(( cpsum + ${a[0]} ));
         a=(${a[@]:1})
 
@@ -102,9 +78,6 @@ if [ $cchoose = 'd' ];then
         cpass=$((cpass+1))
 fi
 }
-
-
-
 Check(){
 if [ $cpsum -le 21 -a $playersum -le 21 ];then
         if [ $cpsum -lt $playersum ];then
@@ -118,22 +91,19 @@ if [ $cpsum -le 21 -a $playersum -le 21 ];then
                 echo 'You Lose'
         fi
 elif [ $cpsum -le 21 ];then
-        echo 'CPM : '$cpsum
-        echo 'Player : '$playersum
-        echo 'You Lose'
+                echo 'CPM : '$cpsum
+                echo 'Player : '$playersum
+                echo 'You Lose'
 
         else
-        echo 'CPM : '$cpsum
-        echo 'Player : '$playersum
         echo 'You Win!'
 
 fi
 }
 
-
-
 Drow
 Order
+shuffle
 while [ $ppass -lt 2 -a $cpass -lt 2 ];
 do
 if [ $s -lt 2 ];then
@@ -156,3 +126,7 @@ fi
 done
 
 Check
+
+
+
+
